@@ -16,9 +16,9 @@ export const ResumeCardButton = ({ title, description, icon }: ResumeCardButtonP
             "hover:brightness-105 dark:hover:brightness-125 transition-all",
         )}>
             {icon}
-            <div>
-                <p>{title}</p>
-                <span>{description}</span>
+            <div className="absolute w-full left-0 bottom-0 p-3 text-left bg-gradient-to-t from-background/80">
+                <p className="text-sm font-bold font-title">{title}</p>
+                <span className="block text-xs text-muted-foreground">{description}</span>
             </div>
         </button>
     )
@@ -26,7 +26,9 @@ export const ResumeCardButton = ({ title, description, icon }: ResumeCardButtonP
 export const ResumeCard = () => {
     return (
         <Link href="/dashboard/resumes/example" className="block w-full">
-
+            <ResumeCardButton 
+                title="Meu currículo" 
+                description="Última atualização há 22 minutos" />
         </Link>
     )
 }
