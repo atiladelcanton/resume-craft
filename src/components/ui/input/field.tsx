@@ -16,7 +16,8 @@ export const InputFIeld = ({ label, name, required, ...props }: InputFieldProps)
             control={control}
             name={name}
             rules={({
-                required: required && "Campo obrigatório"
+                required: required && "Campo obrigatório",
+                
             })}
             render={({ field, fieldState }) => (
                 <FieldWrapper label={label} name={name}
