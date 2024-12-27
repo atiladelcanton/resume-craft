@@ -66,7 +66,7 @@ export const MultipleSection = () => {
                         onEdit={(index) => { }}
                     />
                 </Fragment>
-            )}
+            ))}
         </div>
     )
 }

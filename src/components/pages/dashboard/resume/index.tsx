@@ -11,18 +11,39 @@ import { FormProvider, useForm } from "react-hook-form"
 export const ResumePage = () => {
     const defaultValues: ResumeData = {
         content:{
-            image:{
+            image: {
                 url: "",
                 visible: true
             },
-            infos:{
+            infos: {
                 fullName: "",
                 headLine: "",
                 email: "",
                 phone: "",
                 location: "",
                 website: "",
-            }
+            },
+            summary: "",
+            socialMedias: [
+                {
+                    icon: "",
+                    name:"Teste 1",
+                    url: "https://site.com.br",
+                    username: "Teste Atilao"
+                },
+                {
+                    icon: "",
+                    name:"Teste 2",
+                    url: "https://site2.com.br",
+                    username: "Teste Atilao 2"
+                },
+            ],
+            experiences: [],
+            educations: [],
+            skills: [],
+            languages: [],
+            certifications: [],
+            projects: []
         }
     }
     const methods = useForm<ResumeData>({defaultValues});
