@@ -68,7 +68,7 @@ export const MultipleDragList = ({ data, onAdd, onEdit }: MultipleDragListProps)
                                                         >
                                                             <GripVertical size={14} />
                                                         </div>
-                                                        <div className="flex-1 flex flex-col jistify-center px-3 cursor-pointer hover:bg-muted/80 transition-all">
+                                                        <div className="flex-1 flex flex-col justify-center px-3 cursor-pointer hover:bg-muted/80 transition-all">
                                                             <p className="text-sm font-title font-bold">
                                                                 {field[titleKey]}
                                                             </p>
