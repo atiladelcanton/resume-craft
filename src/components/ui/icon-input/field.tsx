@@ -1,16 +1,18 @@
 "use client";
 import { ComponentProps } from "react"
 import { Controller, useFormContext } from "react-hook-form"
-import { Input } from "."
-import { FieldWrapper } from "../field-wrapper";
 
-type InputFieldProps = ComponentProps<typeof Input> & {
+import { FieldWrapper } from "../field-wrapper";
+import { IconInput } from ".";
+
+type IconFieldProps ={
     label: string;
     name: string;
     containerClassName?: string;
+    required?:boolean;
 }
 
-export const InputFIeld = ({ label, name, required, containerClassName, ...props }: InputFieldProps) => {
+export const IconField = ({ label, name, required, containerClassName, ...props }: IconFieldProps) => {
     const { control } = useFormContext();
     return (
         <Controller
@@ -25,10 +27,10 @@ export const InputFIeld = ({ label, name, required, containerClassName, ...props
                     label={label}
                     name={name}
                     className={containerClassName}
-                    error={fieldState?.error}>
-
-                    <Input {...field} {...props} />
-                    
+                    error={fieldState?.error}
+                >
+                    <IconInput {...field} {...props} />
+ 
                 </FieldWrapper>
             )}
         />

@@ -1,9 +1,11 @@
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Share2, BriefcaseBusiness, GraduationCap, BicepsFlexed, Languages, FileBadge2, Globe } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { MultipleDragItemData, MultipleDragList } from "../multiple-drag-list";
+import { ManageMultipleItemDialog } from "../multiple-drag-list/manage-multiple-item-dialog";
 
 export const MultipleSection = () => {
+    const [sectionToAdd, setSectionToAdd] = useState<MultipleDragItemData | null>(null)
     const sectionsKeys: MultipleDragItemData[] = [
         {
             formKey: "socialMedias",
@@ -62,11 +64,21 @@ export const MultipleSection = () => {
                     <Separator className="my-5" />
                     <MultipleDragList
                         data={section}
-                        onAdd={() => { }}
+                        onAdd={() => setSectionToAdd(section)}
                         onEdit={(index) => { }}
                     />
                 </Fragment>
             ))}
+            {sectionToAdd && (
+                <ManageMultipleItemDialog 
+                    data={sectionToAdd}
+                    open={!!sectionToAdd}
+                    setOpen={(value) => {
+                        if(!value) setSectionToAdd(null)
+                    }}
+                
+                />
+            )}
         </div>
     )
 }

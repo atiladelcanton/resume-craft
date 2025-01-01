@@ -24,20 +24,7 @@ export const ResumePage = () => {
                 website: "",
             },
             summary: "",
-            socialMedias: [
-                {
-                    icon: "",
-                    name:"Teste 1",
-                    url: "https://site.com.br",
-                    username: "Teste Atilao"
-                },
-                {
-                    icon: "",
-                    name:"Teste 2",
-                    url: "https://site2.com.br",
-                    username: "Teste Atilao 2"
-                },
-            ],
+            socialMedias: [],
             experiences: [],
             educations: [],
             skills: [],
