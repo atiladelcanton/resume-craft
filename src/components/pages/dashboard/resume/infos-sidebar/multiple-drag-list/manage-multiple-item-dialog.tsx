@@ -8,6 +8,8 @@ import { InputFIeld } from "@/components/ui/input/field";
 import { EditorField } from "@/components/ui/editor/field";
 import { IconField } from "@/components/ui/icon-input/field";
 import { SliderField } from "@/components/ui/slider/fields";
+import { Divide } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 type ManageMultipleItemDialogProps = BaseDialogProps & {
     data: MultipleDragItemData;
 }
@@ -253,6 +255,19 @@ export const ManageMultipleItemDialog = ({ data, open, setOpen }: ManageMultiple
                     {fieldType === "editor" && <EditorField {...inputProps} />}
                     {fieldType === "icon" && <IconField {...inputProps} />}
                     {fieldType === "slider" && <SliderField {...inputProps} />}
+                    {fieldType === "keywords" && (
+                        <InputFIeld
+                            {...inputProps}
+                            extraContent={value => (
+                                <div className="flex gap-2 flex-wrap mt-1">
+                                    {value?.split(",").map((keyword, index) => {
+                                        if(!keyword.trim()) return null;
+                                         return <Badge key={`keyword-${index}`}>{keyword}</Badge>
+                                    })}
+                                </div>
+                            )}
+                        />
+                    )}
                 </Fragment>
             )
         })
