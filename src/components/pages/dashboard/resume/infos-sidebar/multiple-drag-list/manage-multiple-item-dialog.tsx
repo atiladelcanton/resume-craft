@@ -1,6 +1,6 @@
 import { BaseDialogProps, Dialog } from "@/components/ui/dialog"
 import { MultipleDragItemData, ResumeArrayKeys } from "."
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { Fragment, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -8,10 +8,12 @@ import { InputFIeld } from "@/components/ui/input/field";
 import { EditorField } from "@/components/ui/editor/field";
 import { IconField } from "@/components/ui/icon-input/field";
 import { SliderField } from "@/components/ui/slider/fields";
-import { Divide } from "lucide-react";
+import { v4 as uuid } from "uuid";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 type ManageMultipleItemDialogProps = BaseDialogProps & {
     data: MultipleDragItemData;
+    setOpen: (open: boolean) => void;
 }
 type FormConfig<T> = {
     label: string;
@@ -230,9 +232,8 @@ const formConfig: FormConfigObject = {
 
 export const ManageMultipleItemDialog = ({ data, open, setOpen }: ManageMultipleItemDialogProps) => {
     const methods = useForm();
-    const onSubmit = (formData: any) => {
+    const { setValue, getValues } = useFormContext<ResumeData>();
 
-    }
     const formContent = useMemo(() => {
         const config = formConfig[data.formKey];
 
@@ -261,8 +262,8 @@ export const ManageMultipleItemDialog = ({ data, open, setOpen }: ManageMultiple
                             extraContent={value => (
                                 <div className="flex gap-2 flex-wrap mt-1">
                                     {value?.split(",").map((keyword, index) => {
-                                        if(!keyword.trim()) return null;
-                                         return <Badge key={`keyword-${index}`}>{keyword}</Badge>
+                                        if (!keyword.trim()) return null;
+                                        return <Badge key={`keyword-${index}`}>{keyword}</Badge>
                                     })}
                                 </div>
                             )}
@@ -272,6 +273,20 @@ export const ManageMultipleItemDialog = ({ data, open, setOpen }: ManageMultiple
             )
         })
     }, [data.formKey]);
+
+    const onSubmit = (formData: any) => {
+        const currentValue = getValues();
+        const formKey = data.formKey;
+        const currentFieldValue = currentValue.content[formKey] ?? [];
+
+        setValue(`content.${formKey}`, [...currentFieldValue, {
+            ...formData,
+            id: uuid(),
+        }]);
+        setOpen(false);
+        toast.success("Item adicionado com sucesso");
+    }
+
     return (
         <Dialog
             title="Adicionar novo item"
