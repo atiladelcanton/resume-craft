@@ -68,7 +68,7 @@ export const Jynx = ({ data }: BaseResumeProps) => {
                 className={cn(i > 0 && "mt-4")}
               >
                 <p className="font-bold text-sm mb-2">
-                  {sectionLabels[section.key][data.structure.language]}
+                  {sectionLabels[section.key][data.structure.languages]}
                 </p>
 
                 <div className="border-l border-l-resume-primary pl-4 w-full">

@@ -31,7 +31,7 @@ export const Onix = ({ data }: BaseResumeProps) => {
         >
           <div className={titleColor}>
             <p className="font-bold text-sm">
-              {sectionLabels[section.key][data.structure.language]}
+              {sectionLabels[section.key][data.structure.languages]}
             </p>
 
             <hr className="w-full mt-1 mb-2 border-current" />
