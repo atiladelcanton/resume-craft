@@ -39,7 +39,7 @@ export const Ditto = ({ data }: BaseResumeProps) => {
         return (
           <Fragment key={`section-item-${section.key}`}>
             <div className="grid grid-cols-[140px,1fr]">
-              <p className="font-bold text-sm">{sectionLabels[section.key][data.structure.language]}</p>
+              <p className="font-bold text-sm">{sectionLabels[section.key][data.structure.languages]}</p>
               <ResumeSectionContent
                 key={section.id}
                 section={section}
