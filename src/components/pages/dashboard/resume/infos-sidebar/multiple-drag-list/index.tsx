@@ -78,8 +78,12 @@ export const MultipleDragList = ({ data, onAdd, onEdit }: MultipleDragListProps)
                                                         >
                                                             <GripVertical size={14} />
                                                         </div>
-                                                        <Tooltip content="Clique para editar">
-                                                            <div className="flex-1 flex flex-col justify-center px-3 cursor-pointer hover:bg-muted/80 transition-all">
+                                                        <Tooltip
+
+                                                            content="Clique para editar">
+                                                            <div
+                                                                onClick={() => onEdit(index)}
+                                                                className="flex-1 flex flex-col justify-center px-3 cursor-pointer hover:bg-muted/80 transition-all">
                                                                 <p className="text-sm font-title font-bold">
                                                                     {field[titleKey]}
                                                                 </p>
@@ -98,6 +102,12 @@ export const MultipleDragList = ({ data, onAdd, onEdit }: MultipleDragListProps)
                             )}
                         </Droppable>
                     </DragDropContext>
+                )}
+                 {!isEmpty && (
+                    <Button variant='outline' className="w-max gap-2 ml-auto mt-4 " onClick={onAdd}>
+                        <Plus size={16} />
+                        Adicionar mais Items
+                    </Button>
                 )}
             </div>
         </div>

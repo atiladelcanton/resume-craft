@@ -1,7 +1,7 @@
 import { BaseDialogProps, Dialog } from "@/components/ui/dialog"
 import { MultipleDragItemData, ResumeArrayKeys } from "."
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { Fragment, useMemo } from "react";
+import { Fragment, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { InputFIeld } from "@/components/ui/input/field";
@@ -14,6 +14,7 @@ import { toast } from "sonner";
 type ManageMultipleItemDialogProps = BaseDialogProps & {
     data: MultipleDragItemData;
     setOpen: (open: boolean) => void;
+    initialData: any
 }
 type FormConfig<T> = {
     label: string;
@@ -230,9 +231,14 @@ const formConfig: FormConfigObject = {
     ],
 };
 
-export const ManageMultipleItemDialog = ({ data, open, setOpen }: ManageMultipleItemDialogProps) => {
+export const ManageMultipleItemDialog = ({ data, open, setOpen, initialData }: ManageMultipleItemDialogProps) => {
     const methods = useForm();
     const { setValue, getValues } = useFormContext<ResumeData>();
+    const isEditign = !!initialData;
+    useEffect(() => {
+        if (initialData) methods.reset(initialData);
+    }, [initialData, methods]);
+
 
     const formContent = useMemo(() => {
         const config = formConfig[data.formKey];
@@ -274,11 +280,32 @@ export const ManageMultipleItemDialog = ({ data, open, setOpen }: ManageMultiple
         })
     }, [data.formKey]);
 
+    const onDelete = () => {
+        const currentValue = getValues();
+        const formKey = data.formKey;
+        const currentFieldValue = currentValue.content[formKey] ?? [];
+        const updatedItems = currentFieldValue.filter((item: any) => item.id !== initialData.id);
+        setValue(`content.${formKey}`, updatedItems);
+        setOpen(false);
+        toast.success("Item removido com sucesso");
+    }
+    
     const onSubmit = (formData: any) => {
         const currentValue = getValues();
         const formKey = data.formKey;
         const currentFieldValue = currentValue.content[formKey] ?? [];
-
+        if (isEditign) {
+            const updatedItems = currentFieldValue.map((item: any) => {
+                if (item.id === initialData.id) {
+                    return formData;
+                }
+                return item;
+            });
+            setValue(`content.${formKey}`, updatedItems);
+            setOpen(false);
+            toast.success("Item atualizado com sucesso");
+            return;
+        }
         setValue(`content.${formKey}`, [...currentFieldValue, {
             ...formData,
             id: uuid(),
@@ -303,7 +330,12 @@ export const ManageMultipleItemDialog = ({ data, open, setOpen }: ManageMultiple
                         <FormProvider {...methods}>{formContent} </FormProvider>
                     </div>
                     <div className="ml-auto flex gap-3">
-                        <Button type="submit" className="w-max">Adicionar</Button>
+                        {isEditign && (
+                            <Button variant="destructive" onClick={onDelete}>
+                                Remover
+                            </Button>
+                        )}
+                        <Button type="submit" className="w-max">{isEditign ? "Atualizar" : "Adicionar"}</Button>
                     </div>
                 </form>
             }
