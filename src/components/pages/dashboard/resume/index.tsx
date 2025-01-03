@@ -42,8 +42,6 @@ export const ResumePage = () => {
                     {key:"summary"},
                     {key:"experiences"},
                     {key:"educations"},
-                    {key:"skills"},
-                    {key:"languages"},
                     {key:"certifications"},
                     {key:"projects"}
                 ],

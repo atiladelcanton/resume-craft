@@ -20,7 +20,7 @@ export const InfosSidebar = () => {
             <BasicInfoSection />
             <Separator className="my-5"/>
             <SummarySection />
-            <Separator className="my-5"/>
+            
             <MultipleSection />
         </aside>
     );

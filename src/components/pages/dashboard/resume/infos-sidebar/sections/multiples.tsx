@@ -1,4 +1,4 @@
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Separator } from "@/components/ui/separator"
 import { Share2, BriefcaseBusiness, GraduationCap, BicepsFlexed, Languages, FileBadge2, Globe } from "lucide-react";
 import { Fragment, useState } from "react";
 import { MultipleDragItemData, MultipleDragList } from "../multiple-drag-list";
