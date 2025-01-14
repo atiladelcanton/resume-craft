@@ -3,10 +3,12 @@ import Logo from "@/assets/logo.svg"
 import { NavItems } from "@/components/pages/dashboard/nav-items"
 import { UserDropdown } from "@/components/pages/dashboard/user-dropdown"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
+import { auth } from "@/lib/auth"
 type DanshboardLayoutProps = {
     children: ReactNode
 }
-export default function DanshboardLayout({ children }: DanshboardLayoutProps) {
+export default async function DanshboardLayout({ children }: DanshboardLayoutProps) {
+    const session = await auth();
 
     return (
         <div className="w-full h-screen overflow-hidden grid grid-cols-[300px,1fr]">
@@ -17,7 +19,7 @@ export default function DanshboardLayout({ children }: DanshboardLayoutProps) {
                 <NavItems />
 
                 <div className="w-full mt-auto border-t border-muted px-3 py-4 flex items-center justify-between gap-2">
-                    <UserDropdown />
+                    <UserDropdown  user={session?.user}/>
                     <ThemeToggle />
                 </div>
             </aside>
