@@ -1,8 +1,10 @@
+import { getResumes } from "@/db/queries"
 import { AddResumeButton } from "../add-resume-button"
 import { NewResumeDialog } from "../new-resume-dialog"
 import { ResumeCard } from "../resume-card"
 
-export const ResumesList = () => {
+export const ResumesList = async () => {
+    const resumes = await getResumes();
     return (
         <section className="
         grid grid-col-2 md:grid-cols-3 
@@ -13,8 +15,11 @@ export const ResumesList = () => {
             <NewResumeDialog>
                 <AddResumeButton />
             </NewResumeDialog>
-            <ResumeCard />
-            <ResumeCard />
+            {resumes.map((resume) => (
+                <ResumeCard key={resume.id} resume={resume}/>
+            ))}
+            
+            
         </section>
     )
 }
