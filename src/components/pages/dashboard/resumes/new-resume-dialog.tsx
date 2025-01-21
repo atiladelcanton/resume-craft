@@ -4,6 +4,7 @@ import { BaseDialogProps, Dialog } from "@/components/ui/dialog"
 import { InputFIeld } from "@/components/ui/input/field";
 import { Toaster } from "@/components/ui/sonner";
 import { createResume } from "@/db/actions";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -14,14 +15,19 @@ type FormData = {
 export const NewResumeDialog = (props: BaseDialogProps) => {
     const methods = useForm<FormData>();
     const routes = useRouter();
-    const onSUbmit = async (data: FormData) => {
-        try {
-            const resume = await createResume(data.title);
+
+    const { mutate: handleCreateResume, isPending } = useMutation({
+        mutationFn: createResume,
+        onSuccess: (resume) => {
             toast.success("Curriculo cadastrado com sucesso!");
             routes.push(`/dashboard/resumes/${resume.id}`)
-        } catch (error) {
-            toast.error("Erro ao adicionar o curriculo");
-        }
+        },
+        
+    })
+
+
+    const onSUbmit = async (data: FormData) => {
+        handleCreateResume(data.title)
     };
     return (
         <Dialog
@@ -33,7 +39,7 @@ export const NewResumeDialog = (props: BaseDialogProps) => {
                     <form className="flex flex-col" onSubmit={methods.handleSubmit(onSUbmit)}>
 
                         <InputFIeld label="Titulo" name="title" required />
-                        <Button type="submit" className="w-max mt-6 ml-auto">
+                        <Button type="submit" className="w-max mt-6 ml-auto" disabled={isPending}>
                             Criar
                         </Button>
                     </form>

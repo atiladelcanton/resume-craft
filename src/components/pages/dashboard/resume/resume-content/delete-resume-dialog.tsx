@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { BaseDialogProps, Dialog } from "@/components/ui/dialog";
 import { deleteResume } from "@/db/actions";
+import { useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -13,15 +14,17 @@ export const DeleteResumeDialog = (props: BaseDialogProps) => {
     const params = useParams();
     const router = useRouter();
     const resumeId = params.id as string;
-    const onDelete = async () => {
-        try {
-            await deleteResume(resumeId)
+
+    const {mutate: handleDeleteResume,isPending} = useMutation({
+        mutationFn:deleteResume,
+        onSuccess:() => {
             toast.success("Curriculo deletado com sucesso!");
             router.push("/dashboard/resumes")
-        } catch (error) {
-            console.error(error)
-            toast.error("Erro ao deletar o curriculo, tente novamente mais tarde.")
         }
+    })
+
+    const onDelete = async () => {
+        handleDeleteResume(resumeId);
     }
     return (
         <Dialog
@@ -33,7 +36,7 @@ export const DeleteResumeDialog = (props: BaseDialogProps) => {
             content={
                 <div className="flex gap-2 ml-auto">
                     <Button onClick={() => setOpen(false)}>Cancelar</Button>
-                    <Button variant="destructive" onClick={onDelete}>Deletar</Button>
+                    <Button variant="destructive" onClick={onDelete} disabled={isPending} >Deletar</Button>
                 </div>
             }
         />

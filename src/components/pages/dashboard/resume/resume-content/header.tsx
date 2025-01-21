@@ -10,7 +10,7 @@ type NavigationHeaderProps = {
     title: string;
 }
 export const NavigationHeader = ({ title }: NavigationHeaderProps) => {
-    const { handleDownloadResume} = useResumeDownload(title)
+    const { handleDownloadResume,isLoading} = useResumeDownload(title)
     return (
         <header className="absolute w-full left-0 top-0 z-10 p-2 bg-background border-b border-muted flex item-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -46,7 +46,7 @@ export const NavigationHeader = ({ title }: NavigationHeaderProps) => {
                 </DuplicateResumeDialog>
                 <Tooltip content="Baixar Currículo">
                     <Button variant="secondary"
-                        className="w-8 h-8 bg-transparent" size="icon"
+                        className="w-8 h-8 bg-transparent" size="icon" disabled={isLoading}
                        onClick={handleDownloadResume} 
                     >
                         <Download size={18} />
