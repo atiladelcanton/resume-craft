@@ -16,7 +16,7 @@ export const ResumeContent = ({title}:ResumeContentProps) => {
             <TransformWrapper initialScale={0.5} minScale={0.4} centerOnInit centerZoomedOut limitToBounds={false}>
                 <>
                     <NavigationHeader title={title}/>
-                    <TransformControls />
+                    <TransformControls title={title}/>
                     <TransformComponent>
                         <ResumeTemplate data={data}/>
                     </TransformComponent>
