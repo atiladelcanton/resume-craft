@@ -8,7 +8,6 @@ import { ptBR } from "date-fns/locale";
 
 import { cn } from "@/lib/utils";
 
-import { ThemeProvider } from "@/components/shared/theme-provider"
 import { Toaster } from "@/components/ui/sonner";
 import { ClientProviders } from "@/components/shared/client-providers";
 const fontSans = Nunito_Sans({ subsets: ["latin"], variable: "--font-sans" });
