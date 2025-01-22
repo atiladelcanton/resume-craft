@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import colors from "tailwindcss/colors";
 import tailwindConfig from "../../tailwind.config"
+import { Trykker } from "next/font/google";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -18,7 +19,7 @@ export const sectionIsEmpty = (
   }
 };
 
-export const formatTailwindHtml = (html:string,structure: ResumeStructureData) => {
+export const formatTailwindHtml = (html: string, structure: ResumeStructureData) => {
   const colorKey = structure.colorTheme as keyof typeof colors
   return `
   
@@ -35,4 +36,13 @@ export const formatTailwindHtml = (html:string,structure: ResumeStructureData) =
     </body>
   </html>
   `
+}
+
+export const isValidJson = (json: string) => {
+  try {
+    JSON.parse(json);
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
