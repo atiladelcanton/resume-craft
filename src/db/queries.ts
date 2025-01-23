@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "./drizzle";
-import { resumes } from "./schema";
+import { resumes, users } from "./schema";
 import { cache } from "react";
 import { desc, eq } from "drizzle-orm";
 import { ResumeDto } from "./types";
@@ -14,10 +14,10 @@ export const getResumes = cache(async (): Promise<ResumeDto[]> => {
     if (!userId) throw new Error("Usuario nao encontrado");
 
     const userResumes = await db
-    .query.resumes.findMany({
-        where:eq(resumes.userId,userId),
-        orderBy:[desc(resumes.updatedAt)],
-    })
+        .query.resumes.findMany({
+            where: eq(resumes.userId, userId),
+            orderBy: [desc(resumes.updatedAt)],
+        })
 
     return userResumes;
 });
@@ -34,3 +34,15 @@ export const getResumeById = cache(async (id: string): Promise<ResumeDto | undef
 
     return resume;
 });
+
+export const getUserCredits = cache(async () => {
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) 0;
+
+    const user = await db.query.users.findFirst({
+        where: eq(users.id,userId),
+    })
+    return user?.credits ?? 0
+
+})
