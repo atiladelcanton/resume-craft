@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "./drizzle";
-import { resumes } from "./schema";
+import { resumes, users } from "./schema";
 import { cache } from "react";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
@@ -50,7 +50,7 @@ export const deleteResume = async (id: string) => {
     revalidatePath("/dashboard/resumes");
 }
 
-export const duplicateResume = async (id: string,title:string) => {
+export const duplicateResume = async (id: string, title: string) => {
     const userId = await getUserOrThrow();
 
     const resume = await db.query.resumes.findFirst({ where: eq(resumes.id, id) });
@@ -63,4 +63,19 @@ export const duplicateResume = async (id: string,title:string) => {
         .returning();
     revalidatePath("/dashboard/resumes");
     return duplicatedResume[0];
+}
+
+export const decrementUserCredits = async (amount: number) => {
+    const userId = await getUserOrThrow();
+
+    const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
+    if (!user) throw new Error("Usuario nao encontrado");
+
+
+    const updatedUser = await db
+        .update(users)
+        .set({ credits: user.credits - amount })
+        .where(eq(users.id, userId))
+        .returning();
+    return updatedUser[0];
 }

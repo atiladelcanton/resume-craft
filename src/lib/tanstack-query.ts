@@ -6,10 +6,11 @@ import { toast } from "sonner";
 import axios from "axios";
 
 const handleErrorMessage = (error:unknown) => {
-    if(error instanceof Error){
-        return error.message;
-    }
+
     if(!axios.isAxiosError(error)){
+        if(error instanceof Error){
+            return error.message;
+        }
         return "Ocorreu um erro inesperado"
     }
 

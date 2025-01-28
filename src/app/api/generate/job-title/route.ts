@@ -1,28 +1,34 @@
+import { decrementUserCredits } from "@/db/actions";
+import { getUserCredits } from "@/db/queries";
 import { openai } from "@/lib/openai";
 import { isValidJson } from "@/lib/utils";
 import { z } from "zod";
 
 const schema = z.object({
-    jobTitle: z.string(),
-    jobDescription: z.string().optional()
+  jobTitle: z.string(),
+  jobDescription: z.string().optional()
 })
 
 export const POST = async (request: Request) => {
-    try {
-        const body = await request.json();
-        const { jobTitle, jobDescription } = schema.parse(body);
+  try {
+    const credits = await getUserCredits();
+    if (credits <= 0) {
+      return Response.json({ message: "Você não possui creditos suficientes para usar essa funcionalidade" }, { status: 400 })
+    }
+    const body = await request.json();
+    const { jobTitle, jobDescription } = schema.parse(body);
 
 
-        const completions = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            messages: [
-                {
-                    role: "user",
-                    content: `
+    const completions = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `
                   Crie um conteúdo JSON que será utilizado para popular um currículo, alinhado com o título da vaga: ${jobTitle}${!!jobDescription
-                            ? ` e com a seguinte descrição da vaga: ${jobDescription}`
-                            : ""
-                        }. O conteúdo deve ser otimizado para aumentar as chances de match com a vaga, focando nas habilidades mais relevantes.
+              ? ` e com a seguinte descrição da vaga: ${jobDescription}`
+              : ""
+            }. O conteúdo deve ser otimizado para aumentar as chances de match com a vaga, focando nas habilidades mais relevantes.
                 
                   **Importante**: Não mencione o título da vaga ou dados da empresa no JSON. O conteúdo deve ser escrito de forma profissional e direta, utilizando a metodologia STAR para o campo de "sobre mim" e adotando um tom que destaque as qualificações do candidato.
                 
@@ -40,16 +46,16 @@ export const POST = async (request: Request) => {
                     ]
                   }
                 `,
-                },
-            ],
-        })
-        const json = completions.choices[0].message.content ?? "";
-        if (!isValidJson(json)) throw new Error("JSON invalido");
+        },
+      ],
+    })
+    const json = completions.choices[0].message.content ?? "";
+    if (!isValidJson(json)) throw new Error("JSON invalido");
+    await decrementUserCredits(1)
+    return Response.json({ data: json });
 
-        return Response.json({data: json});
-
-    } catch (error) {
-        console.log(error)
-        return Response.json({ message: "Ocorreu um erro inesperado", error }, { status: 500 })
-    }
+  } catch (error) {
+    console.log(error)
+    return Response.json({ message: "Ocorreu um erro inesperado", error }, { status: 500 })
+  }
 }

@@ -44,6 +44,10 @@ const getCheckoutUrl = async (priceId:string,currentPathname:string) => {
     const {data} = await api.post<{url:string}>("/credits/packages/checkout",{priceId,currentPathname})
     return data.url;
 }
+const getPortalUrl = async (currentPathname: string) => {
+    const {data} = await api.post<{url:string}>("/credits/transaction",{currentPathname});
+    return data.url;
+}
 export const ApiService = {
     getResumeUrl,
     generateContentForJob,
@@ -51,6 +55,7 @@ export const ApiService = {
     translate,
     getCredits,
     getPackages,
-    getCheckoutUrl
+    getCheckoutUrl,
+    getPortalUrl
 }
 
